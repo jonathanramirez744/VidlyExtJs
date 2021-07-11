@@ -1,17 +1,21 @@
-Ext.define('Vidly.model.Customers', {
+Ext.define('Vidly.model.Movies', {
     extend: 'Vidly.model.Base',
-    alias: 'model.customers',
+    alias: 'model.movies',
     fields: [
-        { name: 'custId' },
-        { name: 'custName' },
-        { name: 'isSubcribedToNewsLetter' },
-        { name: 'birthDate' },
-        { name: 'isDelinquent' },
-        { name: 'custDiscount' },
-        { name: 'membershipTypeID' },
+        { name: 'movieId' },
+        { name: 'movieName' },
+        { name: 'releaseDate' },
+        { name: 'addedDate' },
+        { name: 'numStocks' },
+        { name: 'numAvailable' },
+        { name: 'numBorrowed' },
         {
-            name: 'iMembershipType.membershipName',
-            mapping: 'iMembershipType.membershipName'
+            name: 'iGenre.genreName',
+            mapping: 'iGenre.genreName'
         },
+        { name: 'genreId' },
+        { name: 'isReturned' },
+        { name: 'moviePrice' },
+        
     ]
 })

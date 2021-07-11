@@ -11,11 +11,11 @@ Ext.define('Vidly.view.movies.Movies',{
     },
     columns:[
         {text:'Movie Name',dataIndex:'movieName',flex:1},
-        {text:'Genre',dataIndex:'',flex:1},
-        {text:'Available Stocks',dataIndex:'',flex:1},
-        {text:'Rented Stocks',dataIndex:'',flex:1},
-        {text:'Total Stocks',dataIndex:'',flex:1},
-        {text:'Price',dataIndex:'',flex:1}
+        {text:'Genre',dataIndex:'iGenre.genreName',flex:1},
+        {text:'Available Stocks',dataIndex:'numAvailable',flex:1},
+        {text:'Rented Stocks',dataIndex:'numBorrowed',flex:1},
+        {text:'Total Stocks',dataIndex:'numStocks',flex:1},
+        {text:'Price',dataIndex:'moviePrice',flex:1}
     ],
     id:'MovieGrid',
     selModel:{
