@@ -1,4 +1,4 @@
-Ext.define('MyApp.view.movies.Movies',{
+Ext.define('Vidly.view.movies.Movies',{
     extend:'Ext.grid.Panel',
     xtype:'movies',
     title:'Movies Table',
