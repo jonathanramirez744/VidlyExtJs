@@ -84,9 +84,9 @@ Ext.define('Vidly.view.main.Main', {
     }, {
         title: 'Rentals',
         iconCls: 'fa-user',
-        bind: {
-            html: '{loremIpsum}'
-        }
+        items:[{
+            xtype:'rentals'
+        }]
     }, {
         title: 'Movies',
         iconCls: 'fa-users',

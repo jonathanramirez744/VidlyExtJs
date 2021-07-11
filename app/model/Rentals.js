@@ -1,0 +1,9 @@
+Ext.define('Vidly.model.Rentals',{
+    extend:'Vidly.model.Base',
+    alias:'model.rentals',
+    fields:[
+        {name:'fldTranscationID'},
+        {name:'fldtransactionDate'},
+        {name:'fldCustName'}
+    ]
+})

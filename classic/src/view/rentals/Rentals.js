@@ -1,18 +1,19 @@
+
 Ext.define('Vidly.view.rentals.Rentals',{
     extend:'Ext.grid.Panel',
     xtype:'rentals',
     title:'Transactions',
     store:{
-        type:''
+        type:'rentals'
     },
     bbar:{
         xtype:'pagingtoolbar',
         displayInfo:true,
     },
     columns:[
-        {text:'Transaction Number',dataIndex:'',flex:1},
-        {text:'Transaction Date',dataIndex:'',flex:1},
-        {text:'Customer Name',dataIndex:'',flex:1}
+        {text:'Transaction Number',dataIndex:'fldTranscationID',flex:1},
+        {text:'Transaction Date',dataIndex:'fldtransactionDate',flex:1},
+        {text:'Customer Name',dataIndex:'fldCustName',flex:1}
     ],
     id:'TransactionGrid',
     selModel:{
