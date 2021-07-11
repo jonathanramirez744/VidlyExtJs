@@ -82,22 +82,22 @@ Ext.define('Vidly.view.main.Main', {
             xtype: 'mainlist'
         }]
     }, {
-        title: 'Users',
+        title: 'Rentals',
         iconCls: 'fa-user',
         bind: {
             html: '{loremIpsum}'
         }
     }, {
-        title: 'Groups',
+        title: 'Movies',
         iconCls: 'fa-users',
         bind: {
             html: '{loremIpsum}'
         }
     }, {
-        title: 'Settings',
+        title: 'Customers',
         iconCls: 'fa-cog',
-        bind: {
-            html: '{loremIpsum}'
-        }
+        items: [{
+            xtype: 'customer'
+        }]
     }]
 });
