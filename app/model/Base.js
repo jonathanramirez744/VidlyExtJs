@@ -1,5 +1,5 @@
 Ext.define('Vidly.model.Base', {
-    extend: 'Ext.data.Model',
+    extend: '',
 
     schema: {
         namespace: 'Vidly.model'
