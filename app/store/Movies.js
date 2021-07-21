@@ -5,7 +5,7 @@ Ext.define('MyApp.store.Movies',{
     pageSize:10,
     proxy:{
         type:'rest',
-        url:'http://localhost:44324/api/APImovies',   
+        url:'http://localhost:44345/api/APImovies',   
         reader:{
             type:'json',
             rootProperty: 'data'

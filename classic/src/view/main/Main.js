@@ -84,9 +84,9 @@ Ext.define('Vidly.view.main.Main', {
     }, {
         title: 'Rentals',
         iconCls: 'fa-user',
-        items:[{
-            xtype:'rentals'
-        }]
+        // items:[{
+        //     xtype:''
+        // }]
     }, {
         title: 'Movies',
         iconCls: 'fa-users',

@@ -1,5 +1,6 @@
 Ext.define('Vidly.model.Customers', {
     extend: 'Vidly.model.Base',
+    storeId:'customerStoreId',
     alias: 'model.customers',
     fields: [
         { name: 'custId' },
@@ -15,3 +16,5 @@ Ext.define('Vidly.model.Customers', {
         },
     ]
 })
+
+
