@@ -4,17 +4,7 @@ Ext.define('Vidly.view.customers.CustomersController', {
         'Vidly.store.Customers',
     ],
     alias: 'controller.customers',
-    init: function(){
-        console.log('controller')
-        this.control({
-            '#deleteCustomer':{
-                click:'CallOnClick'
-            }
-        })
-    },
-    CallOnClick: function(){
-        alert('hello from controller')
-    },
+    
 
 
     onClick: function (args1, args2) {

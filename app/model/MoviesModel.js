@@ -1,4 +1,4 @@
-Ext.define('Vidly.model.Movies', {
+Ext.define('Vidly.model.MoviesModel', {
     extend: 'Vidly.model.Base',
     alias: 'model.movies',
     fields: [

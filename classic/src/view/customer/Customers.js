@@ -3,6 +3,7 @@ Ext.define('Vidly.view.customers.Customers',{
     xtype:'customer',
     title:'Customer Table',
     id:'customerGridId',
+    height: 600,
     requires:[
         'Vidly.view.customers.CustomersController',
         'Vidly.view.customers.CustomerViewModel'
@@ -31,21 +32,12 @@ Ext.define('Vidly.view.customers.Customers',{
                 handler: function (grid, rowIndex, colIndex) {
                     var selectedCust = grid.getStore().getAt(rowIndex);                   
                     var popWin = Ext.create('Vidly.view.customers.custForm');
-                    //var mydate = new Date(selectedCust.data.birthDate);
                     selectedCust.data.birthDate = new Date(selectedCust.data.birthDate)
                     popWin.getViewModel().set('selectedCust',selectedCust)
 
-                    // popWin.getViewModel().set('custId', selectedCust.data.custId);
-                    // popWin.getViewModel().set('custName', selectedCust.data.custName);
-                    // popWin.getViewModel().set('isSubcribedToNewsLetter', selectedCust.data.isSubcribedToNewsLetter);
-                    // popWin.getViewModel().set('birthDate', mydate);
-                    // popWin.getViewModel().set('isDelinquent', selectedCust.data.isDelinquent);
-                    // popWin.getViewModel().set('custDiscount', selectedCust.data.custDiscount);
-                    // popWin.getViewModel().set('membershipTypeID', selectedCust.data.membershipTypeID);
-                    // popWin.getViewModel().set('membershipName', selectedCust.data.iMembershipType.membershipName);
                     popWin.getViewModel().set('formTitle', 'Update Customer');
                     popWin.getViewModel().set('btnText', 'Update Customer');
-                    //popWin.getViewModel().set('internal_id', selectedCust.internalId);
+
                     popWin.show();
                 }
             }, {
@@ -54,14 +46,14 @@ Ext.define('Vidly.view.customers.Customers',{
                 handler: function (grid, rowIndex, colIndex) {
                     var rec = grid.getStore().getAt(rowIndex);
                     var internal_id = rec.internalId;
-
-                    var store = Ext.getStore('Vidly.store.Customers');
+                    var store = Ext.StoreManager.lookup('customerStoreID');
                     var record = store.getByInternalId(internal_id);
                     console.log(record)
                     Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the customer?', function (btn) {
                         if (btn == 'yes') {
                             store.remove(record);
                             store.sync();
+                            store.load();
                         }
                     });
 
@@ -111,14 +103,7 @@ Ext.define('Vidly.view.customers.custForm', {
             xtype: 'form',
             id: 'form-id-customer',
             defaultType: 'textfield',
-            items: [
-                {
-                    xtype: 'hiddenfield',
-                    name: 'internal_id',
-                    bind: {
-                        value: '{selectedCust.internal_id}'
-                    },
-                },
+            items: [               
                 {
                     xtype: 'hiddenfield',
                     name: 'custId',
