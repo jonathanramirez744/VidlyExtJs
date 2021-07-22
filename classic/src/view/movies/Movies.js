@@ -1,6 +1,6 @@
 Ext.define('Vidly.view.movies.Movies',{
     extend:'Ext.grid.Panel',
-    xtype:'movies',
+    xtype:'moviesGrid',
     id: 'movieGridId',
     title:'Movies Table',
     requires:[
@@ -27,33 +27,13 @@ Ext.define('Vidly.view.movies.Movies',{
             xtype: 'actioncolumn',
             width: 50,
             items: [{
-                iconCls: 'x-fa fa-pencil blue',
+                iconCls: 'x-fa fa-trash blue',
                 tooltip: 'Edit',
-                handler: function (grid, rowIndex, colIndex) {
-                    var selectedMovie = grid.getStore().getAt(rowIndex);
-                    var popWin = Ext.create('Vidly.view.movies.movieForm');
-                    selectedMovie.data.releaseDate = new Date(selectedMovie.data.releaseDate);
-                    popWin.getViewModel().set('selectedMovie', selectedMovie);
-                    popWin.getViewModel().set('formTitle', 'Update Movie');
-                    popWin.getViewModel().set('btnText', 'Update Movie');
-                    popWin.show();
-                }
+                handler: 'onEdit',
             }, {
                 iconCls: 'x-fa fa-trash red',
                 tooltip: 'Delete',
-                handler: function (grid, rowIndex, colIndex) {
-                    var rec = grid.getStore().getAt(rowIndex);
-                    var internal_id = rec.internalId;
-                    var store = Ext.data.StoreManager.lookup('movieStoreId');
-                    var record = store.getByInternalId(internal_id);
-                    Ext.MessageBox.confirm('Confirm', 'Are you sure you want to delete the Movie?', function (btn) {
-                        if (btn == 'yes') {
-                            store.remove(record);
-                            store.sync();
-                            store.load()
-                        }
-                    });
-                }
+                handler: 'onDelete'              
             }]
 
         }
@@ -161,3 +141,29 @@ Ext.define('Vidly.view.movies.movieForm', {
         }
     ]
 })
+
+
+//popUp Window for Movies
+Ext.define('Vidly.view.movies.PopUpMovieForm', {
+    extend:'Ext.window.Window',
+    title: 'Movie Maintenance',
+    height: 720,
+    width: 1250,
+    frame: true,
+    padding: 10,
+    items: [
+        {
+            xtype:'moviesGrid'
+        },
+        {
+            html: '<br/>'
+        },
+        {
+            xtype: 'button',
+            text: 'close',
+            
+        }]
+});
+
+// var popUp = Ext.create('Vidly.view.movies.PopUpMovieForm')
+// popUp.show();

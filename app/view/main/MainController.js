@@ -7,6 +7,8 @@ Ext.define('Vidly.view.main.MainController', {
 
     alias: 'controller.main',
 
+    
+
     onItemSelected: function (sender, record) {
         
         Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);      
@@ -23,4 +25,28 @@ Ext.define('Vidly.view.main.MainController', {
         
         Ext.Msg.confirm('Confirm', 'Are you sure?', 'onConfirm', this);      
     },
+
+
+    onSelectTab:function(tabPanel,tab){
+        switch(tab.tabId){
+            case 'panel-movies':{
+                var popUpWin = Ext.create('Vidly.view.movies.PopUpMovieForm');
+                popUpWin.show();
+                break;
+            }
+        }
+        
+    },
+    onShowMovies:function(){
+        var popUpWin = Ext.create('Vidly.view.movies.PopUpMovieForm');
+        popUpWin.show();
+    },
+    onShowCustomers:function(){
+        var popUpWin = Ext.create('Vidly.view.customers.PopUpCustForm');
+        popUpWin.show();
+    }
+
+   
+
+
 });

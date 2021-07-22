@@ -8,7 +8,7 @@
 Ext.define('Vidly.view.main.Main', {
     extend: 'Ext.tab.Panel',
     xtype: 'app-main',
-
+    id:'tabWorks',
     requires: [
         'Ext.plugin.Viewport',
         'Ext.window.MessageBox',
@@ -76,13 +76,17 @@ Ext.define('Vidly.view.main.Main', {
 
     items: [{
         title: 'Home',
-        iconCls: 'fa-home',
+        tabId:'panel-home',
+        iconCls: 'fa-home',    
         // The following grid shares a store with the classic version's grid as well!
         items: [{
+            
             xtype: 'mainlist'
-        }]
+        }],
+        
     }, {
         title: 'Rentals',
+        tabId:'panel-rental',
         iconCls: 'fa-user',
         // items:[{
         //     xtype:''
@@ -90,14 +94,23 @@ Ext.define('Vidly.view.main.Main', {
     }, {
         title: 'Movies',
         iconCls: 'fa-users',
-        items:[{
-            xtype:'movies'
-        }]
+        tabId:'panel-movies',
+        tabConfig: {
+            listeners: {
+                click: 'onShowMovies'
+            }
+        }
     }, {
         title: 'Customers',
         iconCls: 'fa-cog',
-        items: [{
-            xtype: 'customer'
-        }]
-    }]
+        tabId:'panel-customer',
+        // items: [{
+        //     xtype: 'customer'
+        // }]
+        tabConfig: {
+            listeners: {
+                click: 'onShowCustomers'
+            }
+        }
+    }],
 });
