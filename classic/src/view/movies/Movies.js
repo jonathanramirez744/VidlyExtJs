@@ -164,6 +164,3 @@ Ext.define('Vidly.view.movies.PopUpMovieForm', {
             
         }]
 });
-
-// var popUp = Ext.create('Vidly.view.movies.PopUpMovieForm')
-// popUp.show();

@@ -7,7 +7,7 @@ Ext.define('Vidly.Application', {
     extend: 'Ext.app.Application',
 
     name: 'Vidly',
-
+    stores: ['selectedMoviesTransaction'],
     quickTips: false,
     platformConfig: {
         desktop: {

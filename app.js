@@ -6,7 +6,7 @@ Ext.application({
     extend: 'Vidly.Application',
 
     name: 'Vidly',
-
+    
     requires: [
         // This will automatically load all classes in the Vidly namespace
         // so that application classes do not need to require each other.

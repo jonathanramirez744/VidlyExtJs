@@ -15,7 +15,11 @@ Ext.define('Vidly.view.main.Main', {
 
         'Vidly.view.main.MainController',
         'Vidly.view.main.MainModel',
-        'Vidly.view.main.List'
+        'Vidly.view.main.List',
+
+
+        'Vidly.store.selectedMoviesTransaction',
+        'Vidly.model.SelectedMoviesModel'
     ],
 
     controller: 'main',
@@ -79,8 +83,7 @@ Ext.define('Vidly.view.main.Main', {
         tabId:'panel-home',
         iconCls: 'fa-home',    
         // The following grid shares a store with the classic version's grid as well!
-        items: [{
-            
+        items: [{            
             xtype: 'mainlist'
         }],
         
@@ -88,9 +91,9 @@ Ext.define('Vidly.view.main.Main', {
         title: 'Rentals',
         tabId:'panel-rental',
         iconCls: 'fa-user',
-        // items:[{
-        //     xtype:''
-        // }]
+        items:[{
+             xtype:'ReturnPanelMainForm'
+        }]
     }, {
         title: 'Movies',
         iconCls: 'fa-users',
