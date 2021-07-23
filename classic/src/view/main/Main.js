@@ -91,9 +91,14 @@ Ext.define('Vidly.view.main.Main', {
         title: 'Rentals',
         tabId:'panel-rental',
         iconCls: 'fa-user',
-        items:[{
-             xtype:'ReturnPanelMainForm'
-        }]
+        tabConfig: {
+            listeners: {
+                click: 'onShowRentals'
+            }
+        }
+        // items:[{
+        //      xtype:'ReturnPanelMainForm'
+        // }]
     }, {
         title: 'Movies',
         iconCls: 'fa-users',

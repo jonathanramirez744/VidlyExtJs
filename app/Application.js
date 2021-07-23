@@ -7,14 +7,19 @@ Ext.define('Vidly.Application', {
     extend: 'Ext.app.Application',
 
     name: 'Vidly',
-    stores: ['selectedMoviesTransaction'],
+    stores: ['selectedMoviesTransaction','RentalsStore'],
     quickTips: false,
     platformConfig: {
         desktop: {
             quickTips: true
         }
     },
+    init:function(){
+        //Load the stores 
 
+        ///Rental stores
+        
+    },
     onAppUpdate: function () {
         Ext.Msg.confirm('Application Update', 'This application has an update, reload?',
             function (choice) {

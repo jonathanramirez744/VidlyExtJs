@@ -47,7 +47,7 @@ Ext.define('Vidly.store.TransactionStore', {
             rootProperty: 'data'
         },
     },
-    autoLoad:true,
+    //autoLoad:true
 })
 
 
@@ -69,7 +69,7 @@ var CustomerByTransactionStore = Ext.define('Vidly.store.CustomerByTransactionSt
             rootProperty: 'data'
         },
     },
-    autoLoad:true,
+    //autoLoad:true,
 })
 
 ///////
@@ -89,7 +89,7 @@ var MoviesInTransaction = Ext.define('Vidly.store.MoviesByTansactionStore',{
             rootProperty: 'data'
         },
     },
-    autoLoad:true,
+    //autoLoad:true,
 })
 
 

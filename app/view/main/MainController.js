@@ -7,7 +7,9 @@ Ext.define('Vidly.view.main.MainController', {
 
     alias: 'controller.main',
 
-    
+    init:function(){
+        
+    },
 
     onItemSelected: function (sender, record) {
         
@@ -44,9 +46,12 @@ Ext.define('Vidly.view.main.MainController', {
     onShowCustomers:function(){
         var popUpWin = Ext.create('Vidly.view.customers.PopUpCustForm');
         popUpWin.show();
-    }
+    },
 
-   
+    onShowRentals:function(){
+        var popUpWin = Ext.create('Vidly.view.rentals.mainRentalView');
+        popUpWin.show();
+    }
 
 
 });

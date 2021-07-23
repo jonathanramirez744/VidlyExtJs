@@ -47,12 +47,7 @@ Ext.define('Vidly.view.rentals.TransactionGrid', {
             xtype: 'button',
             text: 'Search Customer',
             iconCls: 'x-fa fa-search',
-            handler: function (me, data) {
-                var store = Ext.data.StoreManager.lookup('RentalTransactionId');
-                store.filter('fldTranscationID', Ext.getCmp('searchfieldTransaction').getValue());
-                store.filter('fldCustName', Ext.getCmp('searchfieldTransaction').getValue());
-                store.load();
-            }
+            handler:'TS_filterTransaction'
         }
     ],
     buttons: [
@@ -64,15 +59,7 @@ Ext.define('Vidly.view.rentals.TransactionGrid', {
 
     ],
     listeners: {
-        select: function (sender, record) {
-            console.log(record)
-            var store = Ext.data.StoreManager.lookup('MoviesByTransactionIdStore');;
-            var returnPanelForm = Ext.getCmp('ReturnPanel');
-            returnPanelForm.getViewModel().set('custName', record.data.fldCustName);
-            returnPanelForm.getViewModel().set('fldTranscationID', record.data.fldTranscationID);
-            store.filter('fldTranscationID', record.data.fldTranscationID);
-            store.load();
-        }
+        select:'TS_showTransactionInfo'
     }
 });
 
@@ -81,9 +68,13 @@ Ext.define('Vidly.view.rentals.TransactionGrid', {
 Ext.define('Vidly.view.rentals.moviesByTransactionsGrid', {
     extend: 'Ext.grid.Panel',
     xtype: 'moviesByTransactionsGrid',
+    requires:[
+        'Vidly.view.rentals.RentalsController'
+    ],
     store: {
         type: 'rentals',
     },
+    controller:'transaction',
     columns: [
         { text: 'Movie Name', dataIndex: 'movies.movieName', flex: 1 },
         { text: 'Date Rented', dataIndex: 'dateRented', flex: 1 },
@@ -94,41 +85,7 @@ Ext.define('Vidly.view.rentals.moviesByTransactionsGrid', {
 
     ],
     listeners: {
-        select: function (sender, record, index) {
-            if (record.data.isReturned == true) {
-                alert('Movie is already returned')
-            } else {
-                var selectedItem = sender.getStore().getAt(index)
-                var popWin = Ext.create('Vidly.view.rentals.CheckoutMoviePopUp');
-
-                //Payment computation
-                var date1 = new Date()
-                var date2 = new Date(record.data.dateRented);
-                var diff = new Date(date1.getTime() - date2.getTime());
-                var DiffinDays = diff.getUTCDate() - 1;
-
-                var moviePrice = (DiffinDays == 0 ? 1 : DiffinDays) * record.data.movies.moviePrice
-                var discountedPrice = moviePrice - (moviePrice * ((record.data.customer.custDiscount == 0 ? 1 : record.data.customer.custDiscount) / 100));
-
-
-                Ext.getCmp('transaction-movieName-view-panel').setReadOnly(true);
-                Ext.getCmp('transaction-moviePrice-view-panel').setReadOnly(true);
-                Ext.getCmp('transaction-dateRented-view-panel').setReadOnly(true);
-                Ext.getCmp('transaction-totalPrice-view-panel').setReadOnly(true);
-                Ext.getCmp('transaction-custDiscount-view-panel').setReadOnly(true);
-                Ext.getCmp('transaction-totalPrice-view-panel').setReadOnly(true);
-
-
-                //popWin.getViewModel().set('totalPrice', discountedPrice);
-
-                selectedItem.data.rentalPayment = discountedPrice;
-                selectedItem.data.dateRented = new Date(selectedItem.data.dateRented);
-                selectedItem.data.dateReturned = new Date();
-
-                popWin.getViewModel().set('RentalRecord', selectedItem);
-                popWin.show();
-            }
-        }
+        select:'TS_checkOutMovies'
     },
     plugins: 'gridfilters',
     height: 450,
@@ -185,6 +142,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     fieldLabel: 'Name',
                     name: 'movieName',
                     id: 'transaction-movieName-view-panel',
+                    readOnly:true,
                     bind: {
                         value: '{RentalRecord.movies.movieName}'
                     },
@@ -193,6 +151,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     fieldLabel: 'Movie Price',
                     name: 'moviePrice',
                     id: 'transaction-moviePrice-view-panel',
+                    readOnly:true,
                     bind: {
                         value: '{RentalRecord.movies.moviePrice}'
                     },
@@ -201,6 +160,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     fieldLabel: 'Discount',
                     name: 'custDiscount',
                     id: 'transaction-custDiscount-view-panel',
+                    readOnly:true,
                     bind: {
                         value: '{RentalRecord.customer.custDiscount}'
                     },
@@ -209,6 +169,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     xtype: 'datefield',
                     fieldLabel: 'Date Borrowed',
                     id: 'transaction-dateRented-view-panel',
+                    readOnly:true,
                     name: 'dateRented',
                     bind: {
                         value: '{RentalRecord.dateRented}'
@@ -218,6 +179,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     xtype: 'datefield',
                     fieldLabel: 'Date Returned',
                     name: 'dateReturned',
+                    readOnly:true,
                     bind: {
                         value: '{RentalRecord.dateReturned}'
                     },
@@ -226,6 +188,7 @@ Ext.define('Vidly.view.rentals.CheckoutMoviePopUp', {
                     fieldLabel: 'Total Price',
                     name: 'totalPrice',
                     id: 'transaction-totalPrice-view-panel',
+                    readOnly:true,
                     bind: {
                         value: '{RentalRecord.rentalPayment}'
                     },
@@ -339,6 +302,7 @@ Ext.define('Vidly.view.rentals.NewTransactionCustomerlist', {
     id: 'NewTransactionCustomerlistId',
     xtype: 'NewTransactionCustomerlist',
     requires: ['*'],
+    controller:'transaction',
     store: {
         type: 'customerByTransactions'
     },
@@ -371,11 +335,7 @@ Ext.define('Vidly.view.rentals.NewTransactionCustomerlist', {
             xtype: 'button',
             text: 'Search Customer',
             iconCls: 'x-fa fa-search',
-            handler: function (me, data) {
-                var store = Ext.data.StoreManager.lookup('NewTransactionCustomerList');
-                store.filter('custName', Ext.getCmp('searchfieldNewCust').getValue());
-                store.load();
-            }
+            handler:'TS_filterCustomer'
         }
     ],
     bbar: {
@@ -386,12 +346,7 @@ Ext.define('Vidly.view.rentals.NewTransactionCustomerlist', {
         emptyMsg: 'No Record to display'
     },
     listeners: {
-        select: function (render, selected) {
-            var NewTransactionId = Ext.getCmp('NewtransactionHeaderId')
-            NewTransactionId.getViewModel().set('custId', selected.data.custId)
-            NewTransactionId.getViewModel().set('custName', selected.data.custName)
-
-        }
+        select:'TS_addNewCustomerinTransaction'
     }
 
 })
@@ -445,17 +400,17 @@ Ext.define('Vidly.view.rentals.NewTransactionMoviesGrid', {
     extend: 'Ext.grid.Panel',
     id: 'NewTransactionMoviesGridId',
     xtype: 'NewTransactionMoviesGridId',
-    requires:[
+    requires: [
         'Vidly.view.rentals.RentalsController'
     ],
     store: {
-        type:'moviesByTransaction'
-    },     
+        type: 'moviesByTransaction'
+    },
     viewModel: {
         type: 'rentals'
     },
-    controller:'transaction',
-   
+    controller: 'transaction',
+
     columns: [
         { text: 'Movie Name', dataIndex: 'movieName', flex: 1 },
         { text: 'Available Stocks', dataIndex: 'numAvailable', flex: 1 },
@@ -481,13 +436,7 @@ Ext.define('Vidly.view.rentals.NewTransactionMoviesGrid', {
             xtype: 'button',
             text: 'Search Movie',
             iconCls: 'x-fa fa-search',
-            handler: function () {
-
-                var store = Ext.data.StoreManager.lookup('moviesByTransactionId');
-                console.log(Ext.getCmp('newTransaction-searchfield').getValue())
-                store.filter('movieName', Ext.getCmp('newTransaction-searchfield').getValue());
-                store.load();
-            }
+            handler:'TS_filterMovies'
         }
     ],
     height: 370,
@@ -496,11 +445,11 @@ Ext.define('Vidly.view.rentals.NewTransactionMoviesGrid', {
     }
 })
 
-Ext.define('Vidly.view.rentals.sample',{
+Ext.define('Vidly.view.rentals.sample', {
     extend: 'Ext.grid.Panel',
     xtype: 'sample',
     store: {
-        type:'selectedMoviesTransaction'
+        type: 'selectedMoviesTransaction'
     },
     columns: [
         { text: 'Movie Name', dataIndex: 'fldTranscationID', flex: 1 },
@@ -508,7 +457,7 @@ Ext.define('Vidly.view.rentals.sample',{
         { text: 'Rented Stocks', dataIndex: 'movieId', flex: 1 },
         { text: 'Total Stocks', dataIndex: 'movieName', flex: 1 }
     ],
-    layout : 'fit'
+    layout: 'fit'
 })
 
 
@@ -539,7 +488,6 @@ Ext.define('Vidly.view.rentals.AddMoviesPanel', {
             xtype: 'button',
             text: 'Review Selected Movies',
             handler: function () {
-                //display selected Movies
                 var popWin = Ext.create('Vidly.view.rentals.NewTransactionPopUp')
                 popWin.show();
             }
@@ -548,10 +496,11 @@ Ext.define('Vidly.view.rentals.AddMoviesPanel', {
 })
 
 Ext.define('Vidly.view.rentals.SelectedMoviesList', {
-    extend: 'Ext.grid.Panel',  
+    extend: 'Ext.grid.Panel',
     xtype: 'SelectedMoviesList',
     id: 'SelectedMoviesListId',
     store: 'selectedMoviesTransaction',
+    controller:'transaction',
     closable: false,
     page: 10,
     viewModel: {
@@ -566,19 +515,7 @@ Ext.define('Vidly.view.rentals.SelectedMoviesList', {
                 {
                     iconCls: 'x-fa fa-trash',
                     tooltip: 'Delete',
-                    handler: function (grid, rowIndex, colIndex) {
-                        //Delete selected list
-                        var rec = grid.getStore().getAt(rowIndex);
-                        Ext.MessageBox.confirm('Confirm', 'Are you sure to delete this item?', function (btn) {
-                            if (btn == 'yes') {
-                                var store = grid.getStore();
-                                var internal_id = rec.internalId;
-                                var record = store.getByInternalId(internal_id);
-                                store.remove(record);
-                                store.sync();
-                            }
-                        })
-                    }
+                    handler:'TS_deleteSelectedMovies'
                 }
             ]
         }
@@ -594,6 +531,7 @@ Ext.define('Vidly.view.rentals.NewTransactionPopUp', {
     title: 'Review Selected Movies',
     xtype: 'NewTransactionPopUp',
     id: 'NewTransactionPopUp',
+    controller:'transaction',
     height: 400,
     width: 500,
     border: true,
@@ -610,35 +548,12 @@ Ext.define('Vidly.view.rentals.NewTransactionPopUp', {
         {
             xtype: 'button',
             text: 'Checkout',
-            handler: function () {
-                //saves the selected movies
-                var store = Ext.getStore('selectedMoviesTransaction');
-                var storeRecord = store.getData().getRange()
-                for (var x = 0; x < store.data.length; x++) {
-                    var curRecord = storeRecord[x].data
-                    var transactionStore = Ext.StoreManager.lookup('MoviesByTransactionIdStore');
-                    transactionStore.insert(0, [{ fldTranscationID: curRecord.fldTranscationID, custId: curRecord.custId, movieId: curRecord.movieId }])
-
-                    console.log(curRecord);
-                }
-                transactionStore.sync();
-                transactionStore.load();
-
-                store.load()
-                //popSelectedMovies.hide();
-
-                // NewTransactionCustomerListStore.load();
-                // NewTransactionMoviesStore.load();
-
-                //clear local Storage
-                store.getProxy().clear();
-                console.log(store)
-            }
+            handler:'TS_checkoutMoviesInCart'           
         },
         {
             xtype: 'button',
             text: 'Close',
-            handler: function () { this.up('window').hide(); }
+            handler: function () { this.up('window').close(); }
         }
     ],
 
@@ -663,8 +578,8 @@ Ext.define('Vidly.view.rentals.TransactionPopForm', {
     title: 'Movie Transaction',
     id: 'TransactionPopForm',
     height: 700,
-    //closable: false,
-    width: 1350,
+    closable: false,
+    width: 1250,
     frame: true,
     viewModel: {
         type: 'rentals'
@@ -674,21 +589,49 @@ Ext.define('Vidly.view.rentals.TransactionPopForm', {
         type: 'hbox',
         align: 'left'
     },
-    //items: ['TransactionLeftPanel', 'AddMoviesPanel'],
     items: [
-         { xtype: 'TransactionLeftPanel' },
-          { xtype: 'AddMoviesPanel'},
-        //{ xtype:'sample'}
+        { xtype: 'TransactionLeftPanel' },
+        { xtype: 'AddMoviesPanel' },
     ],
     bbar: [
         {
             text: 'Close',
-            handler: function () { this.up('window').hide(); }
+            handler: function () {
+                var store = Ext.getStore('selectedMoviesTransaction');
+                store.getProxy().clear();
+                this.up('window').close();
+
+            }
         }
     ],
 });
 
 
+//Main Window Form for Movie Rentals
+Ext.define('Vidly.view.rentals.mainRentalView', {
+    extend:'Ext.window.Window',
+    title: 'Movie Rentals',
+    xtype: 'mainRentalView',
 
+    height: 720,
+    width: 1250,
+    padding: 10,
+    frame: true,
+    items: [
+        {
+            xtype:'ReturnPanelMainForm'
+        },
+        {
+            html:'<br/>'
+        },
+        {
+            xtype: 'button',
+            text: 'close',
+            handler: function () {
+                this.up('window').close();
+            }
+        }
+    ]
+});
 
 
